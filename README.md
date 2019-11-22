@@ -25,20 +25,20 @@ As a database was chosen MySQL because of the comfortable data presentation.
 [Source file link](https://github.com/anonlatte/taxiGrpcService/blob/master/.env)
 ```
 Paths to
-    * mysql folder                 -   DB_PATH_HOST=./databases
-    * source files                   -   APP_PATH_HOST=./src
-    * main Dockerfile           -   APP_PATH_DOCKER=/go/src/golang-service
-gRPC port number              -   GRPC_PORT=48695
+    * mysql folder          -   DB_PATH_HOST=./databases
+    * source files          -   APP_PATH_HOST=./src
+    * main Dockerfile       -   APP_PATH_DOCKER=/go/src/golang-service
+gRPC port number            -   GRPC_PORT=48695
 MySQL 
-    * database host              -   DB_HOST=db:3306
-    * database username    -   DB_USER=root
-    * user's password           -   DB_PASSWORD=157266
-    * schema name              -   DB_SCHEMA=taxi
-    * dump file                       -   DB_RESTORE_TARGET=./dumps/db_dump.sql
+    * database host         -   DB_HOST=db:3306
+    * database username     -   DB_USER=root
+    * user's password       -   DB_PASSWORD=157266
+    * schema name           -   DB_SCHEMA=taxi
+    * dump file             -   DB_RESTORE_TARGET=./dumps/db_dump.sql
 ```
 #### Deployment
 Go to main service folder which contains [docker-compose.yaml](https://github.com/anonlatte/taxiGrpcService/blob/master/docker-compose.yaml) and write this commands into the console.
-__Use credentials which you wrote in the .env file.__
+*Use credentials which you wrote in the .env file.*
 ```
 # docker-compose up
 # cat db_dump.sql | docker exec -i mysql /usr/bin/mysql -u username --password=1234 schema
@@ -55,7 +55,7 @@ API_VERSION=v1
 ServerAddress=
 ServerPort=
 ```
-These applications are using Google maps API so follow the [instruction](https://developers.google.com/maps/documentation/embed/get-api-key) to know how to get the api key.
+**These applications are using Google maps API so follow the [instruction](https://developers.google.com/maps/documentation/embed/get-api-key) to know how to get the api key.**
 
 Api version is defined in the service's sources, server's address check with ```ifconfig``` or ```ipconfig```, port you've defined at this [part](#docker-setup).
 2. Build and run the app.
@@ -66,12 +66,12 @@ Api version is defined in the service's sources, server's address check with ```
 You can check screenshots of applications [here](). 
 
 ## Built With
-- [gRPC]()
-- [JavaFX12]()
+- [gRPC](https://github.com/grpc/grpc-go)
+- [JavaFX12](https://github.com/openjfx)
 
 ## Authors
 
-- [Proshunin German](https://www.linkedin.com/in/anonlatte/?locale=en_US)
+- [Proshunin German](https://www.linkedin.com/in/anonlatte/)
 
 See also the list of [contributors](https://github.com/anonlatte/TaxiService/graphs/contributors) who participated in this project.
 
