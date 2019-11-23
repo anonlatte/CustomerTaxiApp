@@ -47,14 +47,11 @@ After all we can build and run the apps.
 
 - Customer application
 
-![Customer application](https://imgur.com/PMOEN0N)
+![Customer application](https://i.imgur.com/PMOEN0N.png)
 - Driver application
 
-![Driver application](https://imgur.com/iBs5TJh) 
+![Driver application](https://i.imgur.com/iBs5TJh.png) 
 - Dispatcher application
-
-![Dispatcher application](https://imgur.com/inplhvC) 
-
 
 ## Built with
 
