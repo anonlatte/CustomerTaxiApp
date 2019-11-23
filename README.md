@@ -1,72 +1,63 @@
-# Taxi application
+# Taxi application stack
 
-## Getting Started
+## Getting started
 
-I've created this application for diploma work at the college. It contains 
-[microservice](https://github.com/anonlatte/taxiGrpcService) which has been written with Go and gRPC, 
+I were interested to created something like Uber or Gett, so I decided 
+create the same application for a college degree. 
+
+### Overview
+It contains [microservice](https://github.com/anonlatte/taxiGrpcService), 
+which has been written in Go using gRPC, android
 [driver's application](https://github.com/anonlatte/TaxiService/tree/master/drivers_app),
 [user's application](https://github.com/anonlatte/TaxiService/tree/master/customers_app)
-and primitive [disptatcher's application](https://github.com/anonlatte/DispatcherApp) are written with Kotlin.
-Desktop application (__dispactcher's app__) uses JavaFX12. 
-As a database was chosen MySQL because of the comfortable data presentation.
+and primitive desktop [disptatcher's application](https://github.com/anonlatte/DispatcherApp) were written in Kotlin.
+Desktop application (__dispactcher's app__) is using JavaFX12. 
+MySQL was chosen as a database due to its comfortable data presentation.
 
-### Prerequisites
-- Docker
-- Docker-Compose
-- Google cloud account
+## Quick start
 
-### Service installing
+### Requirements
 
-1. For mobile application at first we must to install server side service. On your PC must be installed docker and docker-compose.
-2. Clone [service's repository](https://github.com/anonlatte/taxiGrpcService) and check the settings.
+- Deployed container with [microserivce](https://github.com/anonlatte/taxiGrpcService)
+- Google cloud account for getting the API key
 
-#### Basic Service's Settings
-##### [Dockerfile environment settings](#docker-setup)
-[Source file link](https://github.com/anonlatte/taxiGrpcService/blob/master/.env)
-```
-Paths to
-    * mysql folder          -   DB_PATH_HOST=./databases
-    * source files          -   APP_PATH_HOST=./src
-    * main Dockerfile       -   APP_PATH_DOCKER=/go/src/golang-service
-gRPC port number            -   GRPC_PORT=48695
-MySQL 
-    * database host         -   DB_HOST=db:3306
-    * database username     -   DB_USER=root
-    * user's password       -   DB_PASSWORD=157266
-    * schema name           -   DB_SCHEMA=taxi
-    * dump file             -   DB_RESTORE_TARGET=./dumps/db_dump.sql
-```
-#### Deployment
-Go to main service folder which contains [docker-compose.yaml](https://github.com/anonlatte/taxiGrpcService/blob/master/docker-compose.yaml) and write this commands into the console.
-*Use credentials which you wrote in the .env file.*
-```
-# docker-compose up
-# cat db_dump.sql | docker exec -i mysql /usr/bin/mysql -u username --password=1234 schema
-```
+## Setting up
 
-After all these manipulations we can clone [mobile application's repository](https://github.com/anonlatte/TaxiService) which contains source files of user's and driver's application.
+1. Clone [the repository](https://github.com/anonlatte/TaxiService) which contains source files of user's and driver's application.
 
-### Setting Up Mobile Application
-
-1. Create ```gradle.properties``` in the project folder with next contains:
+2. Create ```gradle.properties``` in the project folder as follows:
 ``` 
 GOOGLE_MAPS_API_KEY=
 API_VERSION=v1
 ServerAddress=
 ServerPort=
 ```
-**These applications are using Google maps API so follow the [instruction](https://developers.google.com/maps/documentation/embed/get-api-key) to know how to get the api key.**
+**These applications are using Google maps API so follow the [instruction](https://developers.google.com/maps/documentation/embed/get-api-key) 
+to find out how to get the api key.**
 
-Api version is defined in the service's sources, server's address check with ```ifconfig``` or ```ipconfig```, port you've defined at this [part](#docker-setup).
-2. Build and run the app.
-3. Then you can sign up as a driver and create an order as a user. 
+Api version is defined in the service's sources, server's address 
+can be checked with ```ifconfig``` or ```ipconfig```, the port that 
+you have defined in this [part](#dockerfile-environment-settings).
+
+## Building 
+
+After all we can build and run the apps. 
 
 ## Media
 
-You can check screenshots of applications [here](). 
+- Customer application
 
-## Built With
-- [gRPC](https://github.com/grpc/grpc-go)
+![Customer application](https://imgur.com/PMOEN0N)
+- Driver application
+
+![Driver application](https://imgur.com/iBs5TJh) 
+- Dispatcher application
+
+![Dispatcher application](https://imgur.com/inplhvC) 
+
+
+## Built with
+
 - [JavaFX12](https://github.com/openjfx)
 
 ## Authors
@@ -78,4 +69,4 @@ See also the list of [contributors](https://github.com/anonlatte/TaxiService/gra
 
 ## License
 
-This project is licensed under GNU GENERAL PUBLIC LICENSE - see the [LICENSE](LICENSE) file for details.
+This project is licensed under GNU GENERAL PUBLIC LICENSE - see the [LICENSE](LICENSE) file for more details.
