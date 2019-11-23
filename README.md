@@ -51,7 +51,6 @@ After all we can build and run the apps.
 - Driver application
 
 ![Driver application](https://i.imgur.com/iBs5TJh.png) 
-- Dispatcher application
 
 ## Built with
 
