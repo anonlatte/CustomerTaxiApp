@@ -1,9 +1,10 @@
-package com.example.taxiapp
+package com.example.taxiapp.utils
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.support.v7.app.AppCompatActivity
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
+import com.example.taxiapp.R
 import java.util.regex.Pattern
 
 class Validation(private val activity: AppCompatActivity) {
@@ -132,5 +133,4 @@ class Validation(private val activity: AppCompatActivity) {
             true
         }
     }
-
 }

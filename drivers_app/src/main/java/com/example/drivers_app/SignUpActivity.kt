@@ -3,8 +3,6 @@ package com.example.drivers_app
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.Html
 import android.text.SpannableStringBuilder
@@ -12,6 +10,8 @@ import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.github.pinball83.maskededittext.MaskedEditText
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
@@ -29,7 +29,7 @@ class SignUpActivity : AppCompatActivity() {
     private var passwordEditText: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        ForDebugging().turnOnStrictMode()
+//        ForDebugging().turnOnStrictMode()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 

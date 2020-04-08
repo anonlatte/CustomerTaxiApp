@@ -1,7 +1,6 @@
-package com.example.taxiapp
+package com.example.taxiapp.ui.main
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,10 +11,6 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
-import android.support.constraint.ConstraintLayout
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -23,8 +18,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.example.taxiapp.directions_helpers.FetchURL
-import com.example.taxiapp.directions_helpers.TaskLoadedCallback
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.taxiapp.*
+import com.example.taxiapp.utils.directions_helpers.FetchURL
+import com.example.taxiapp.utils.directions_helpers.TaskLoadedCallback
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -108,7 +109,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        ForDebugging().turnOnStrictMode() // TODO: test app
+//        ForDebugging().turnOnStrictMode() // TODO: test app
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -335,7 +336,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     private fun makeOrderRequest(): Boolean {
         // TODO: Validate not null fields
         // Build connection and rpc objects
-        val managedChannel = ManagedChannelBuilder.forAddress(getString(R.string.server_address), resources.getInteger(R.integer.server_port)).usePlaintext().build()
+        val managedChannel = ManagedChannelBuilder.forAddress(BuildConfig.ServerAddress, BuildConfig.ServerPort).usePlaintext().build()
         val blockingStub = taxiServiceGrpc.newBlockingStub(managedChannel)
         val cabRide = CabRide.newBuilder()
                 .setCustomerId(sPref!!.getInt("customer_id", 0))
@@ -352,7 +353,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         }
         cabRide.build()
         val cabRideRequest = CreateCabRideRequest.newBuilder()
-                .setApi(getString(R.string.api_version))
+                .setApi(BuildConfig.ApiVersion)
                 .setCabRide(cabRide)
                 .setPrice(tripPriceTextView!!.text.toString().split('.')[0].toInt()) // TODO check price set
                 .setAuthToken(sPref!!.getString("auth_token", ""))
@@ -384,10 +385,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     private fun deleteCabRequest(): Boolean {
         // TODO: Validate not null fields
         // Build connection and rpc objects
-        val managedChannel = ManagedChannelBuilder.forAddress(getString(R.string.server_address), resources.getInteger(R.integer.server_port)).usePlaintext().build()
+        val managedChannel = ManagedChannelBuilder.forAddress(BuildConfig.ServerAddress, BuildConfig.ServerPort).usePlaintext().build()
         val blockingStub = taxiServiceGrpc.newBlockingStub(managedChannel)
         val deleteCabRideRequest = DeleteCabRideRequest.newBuilder()
-                .setApi(getString(R.string.api_version))
+                .setApi(BuildConfig.ApiVersion)
                 .setCabRideId(sPref!!.getInt("orderedCabRideId", -1))
                 .setCustomerId(sPref!!.getInt("customer_id", -1))
                 .setAuthToken(sPref!!.getString("auth_token", ""))
@@ -423,10 +424,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     private fun checkCabRideStatus(): CheckCabRideStatus {
         // TODO: Validate not null fields
         // Build connection and rpc objects
-        val managedChannel = ManagedChannelBuilder.forAddress(getString(R.string.server_address), resources.getInteger(R.integer.server_port)).usePlaintext().build()
+        val managedChannel = ManagedChannelBuilder.forAddress(BuildConfig.ServerAddress, BuildConfig.ServerPort).usePlaintext().build()
         val blockingStub = taxiServiceGrpc.newBlockingStub(managedChannel)
         val checkCabRideStatusRequest = CheckCabRideStatusRequest.newBuilder()
-                .setApi(getString(R.string.api_version))
+                .setApi(BuildConfig.ApiVersion)
                 .setCabRideId(sPref!!.getInt("orderedCabRideId", -1))
                 .setAuthToken(sPref!!.getString("auth_token", ""))
                 .build()

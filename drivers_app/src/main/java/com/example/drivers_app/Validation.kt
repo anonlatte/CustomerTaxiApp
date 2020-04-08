@@ -2,8 +2,8 @@ package com.example.drivers_app
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.support.v7.app.AppCompatActivity
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import com.github.pinball83.maskededittext.MaskedEditText
 import java.text.SimpleDateFormat
 import java.time.LocalDate

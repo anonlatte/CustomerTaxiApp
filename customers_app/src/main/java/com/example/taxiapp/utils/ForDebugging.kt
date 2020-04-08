@@ -1,6 +1,7 @@
-package com.example.taxiapp
+package com.example.taxiapp.utils
 
 import android.os.StrictMode
+import com.example.taxiapp.BuildConfig
 
 class ForDebugging {
     fun turnOnStrictMode() {

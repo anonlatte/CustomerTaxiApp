@@ -3,13 +3,15 @@ package com.example.taxiapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.example.taxiapp.ui.main.MainActivity
+import com.example.taxiapp.utils.Validation
 import io.grpc.ManagedChannelBuilder
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
@@ -19,6 +21,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+// TODO convert as a fragment
 class SignInActivity : AppCompatActivity() {
     private var phoneEditText: EditText? = null
     private var passwordEditText: EditText? = null
@@ -26,7 +29,7 @@ class SignInActivity : AppCompatActivity() {
     private var validation: Validation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        ForDebugging().turnOnStrictMode()
+//        ForDebugging().turnOnStrictMode()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
@@ -64,11 +67,11 @@ class SignInActivity : AppCompatActivity() {
         if (!fieldsValidation.values.contains(false)) {
             GlobalScope.launch {
                 // Build connection and rpc objects
-                val managedChannel = ManagedChannelBuilder.forAddress(getString(R.string.server_address), resources.getInteger(R.integer.server_port)).usePlaintext().build()
+                val managedChannel = ManagedChannelBuilder.forAddress(BuildConfig.ServerAddress, BuildConfig.ServerPort).usePlaintext().build()
                 val blockingStub = taxiServiceGrpc.newBlockingStub(managedChannel)
                 val phoneText = countryCodePicker.selectedCountryCode + phoneEditText!!.text
                 val loginRequest = LoginRequest.newBuilder()
-                        .setApi(getString(R.string.api_version))
+                        .setApi(BuildConfig.ApiVersion)
                         .setLogin(phoneText)
                         .setPassword(passwordEditText!!.text.toString())
                         .setUserType(0)

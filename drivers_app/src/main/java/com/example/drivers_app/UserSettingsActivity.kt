@@ -1,17 +1,21 @@
 package com.example.drivers_app
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.drivers_app.search_adapter.CarItem
 import com.example.drivers_app.search_adapter.CarModelAdapter
 import com.example.drivers_app.search_adapter.ColorAdapter
@@ -107,7 +111,7 @@ class UserSettingsActivity : AppCompatActivity() {
         }
 
         searchCarDialogView!!.searchView.imeOptions = EditorInfo.IME_ACTION_DONE
-        searchCarDialogView!!.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchCarDialogView!!.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener, android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -117,7 +121,7 @@ class UserSettingsActivity : AppCompatActivity() {
                 return false
             }
         })
-        searchColorDialogView!!.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchColorDialogView!!.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener, android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }

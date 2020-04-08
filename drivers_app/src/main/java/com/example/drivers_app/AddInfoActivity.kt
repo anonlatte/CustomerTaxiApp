@@ -1,19 +1,18 @@
 package com.example.drivers_app
 
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.taxiapp.*
 import com.github.pinball83.maskededittext.MaskedEditText
 import com.google.protobuf.ByteString
@@ -177,9 +176,9 @@ class AddInfoActivity : AppCompatActivity() {
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_CANCELED) {
+        if (resultCode == AppCompatActivity.RESULT_CANCELED) {
             return
-        } else if (resultCode == Activity.RESULT_OK) {
+        } else if (resultCode == AppCompatActivity.RESULT_OK) {
             if (data != null) {
                 val contentURI = data.data
                 try {

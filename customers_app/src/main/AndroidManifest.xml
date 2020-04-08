@@ -32,14 +32,14 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".SplashScreenActivity"
-            android:theme="@style/SplashScreenTheme">
+            android:name=".ui.splash.SplashActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".SignInActivity" />
         <activity android:name=".SignUpActivity" />
     </application>

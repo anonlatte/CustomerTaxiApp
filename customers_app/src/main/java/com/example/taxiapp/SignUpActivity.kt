@@ -2,8 +2,6 @@ package com.example.taxiapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
@@ -12,6 +10,9 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.example.taxiapp.utils.Validation
 import io.grpc.ManagedChannelBuilder
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-
+// TODO convert as a fragment
 class SignUpActivity : AppCompatActivity() {
 
     private var validation: Validation? = null
@@ -29,7 +30,7 @@ class SignUpActivity : AppCompatActivity() {
     private var passwordEditText: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        ForDebugging().turnOnStrictMode()
+//        ForDebugging().turnOnStrictMode()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
         nameEditText = nameEdit
@@ -90,7 +91,7 @@ class SignUpActivity : AppCompatActivity() {
         )
         if (!fieldsValidation.values.contains(false)) {
             GlobalScope.launch {
-                val managedChannel = ManagedChannelBuilder.forAddress(getString(R.string.server_address), resources.getInteger(R.integer.server_port)).usePlaintext().build()
+                val managedChannel = ManagedChannelBuilder.forAddress(BuildConfig.ServerAddress, BuildConfig.ServerPort).usePlaintext().build()
                 val blockingStub = taxiServiceGrpc.newBlockingStub(managedChannel)
                 val phoneText = countryCodePicker.selectedCountryCode + phoneEditText!!.text
                 val customer = Customer.newBuilder()
@@ -100,7 +101,7 @@ class SignUpActivity : AppCompatActivity() {
                         .setPassword(passwordEditText!!.text.toString())
                         .build()
                 val createCustomerRequest = CreateCustomerRequest.newBuilder()
-                        .setApi(getString(R.string.api_version))
+                        .setApi(BuildConfig.ApiVersion)
                         .setCustomer(customer)
                         .build()
                 val createCustomerResponse: CreateCustomerResponse

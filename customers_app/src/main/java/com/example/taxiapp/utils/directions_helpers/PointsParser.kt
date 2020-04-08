@@ -1,4 +1,4 @@
-package com.example.taxiapp.directions_helpers
+package com.example.taxiapp.utils.directions_helpers
 
 
 import android.content.Context
@@ -7,7 +7,7 @@ import android.os.AsyncTask
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.View
-import com.example.taxiapp.MainActivity
+import com.example.taxiapp.ui.main.MainActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.android.synthetic.main.activity_order_options.*

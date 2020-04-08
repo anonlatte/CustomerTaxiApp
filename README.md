@@ -25,7 +25,7 @@ MySQL was chosen as a database due to its comfortable data presentation.
 
 1. Clone [the repository](https://github.com/anonlatte/TaxiService) which contains source files of user's and driver's application.
 
-2. Create ```gradle.properties``` in the project folder as follows:
+2. Create ```keystore.properties``` in the project folder as follows:
 ``` 
 GOOGLE_MAPS_API_KEY=
 API_VERSION=v1
@@ -37,7 +37,7 @@ to find out how to get the api key.**
 
 Api version is defined in the service's sources, server's address 
 can be checked with ```ifconfig``` or ```ipconfig```, the port that 
-you have defined in this [part](#dockerfile-environment-settings).
+you have defined.
 
 ## Building 
 
@@ -54,7 +54,7 @@ After all we can build and run the apps.
 
 ## Built with
 
-- [JavaFX12](https://github.com/openjfx)
+- [gRPC](https://grpc.io/)
 
 ## Authors
 

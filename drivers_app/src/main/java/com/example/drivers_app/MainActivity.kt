@@ -1,7 +1,6 @@
 package com.example.drivers_app
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -13,10 +12,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.provider.Settings
-import android.support.design.widget.NavigationView
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
@@ -25,6 +20,10 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.drivers_app.directions_helpers.FetchURL
 import com.example.drivers_app.directions_helpers.TaskLoadedCallback
 import com.example.taxiapp.*
@@ -38,6 +37,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.navigation.NavigationView
 import io.grpc.ManagedChannelBuilder
 import io.grpc.StatusRuntimeException
 import io.grpc.okhttp.internal.Platform
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity(),
     private var timerTask: TimerTask? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        ForDebugging().turnOnStrictMode()
+//        ForDebugging().turnOnStrictMode()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

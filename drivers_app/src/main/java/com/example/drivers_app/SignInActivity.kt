@@ -4,13 +4,13 @@ package com.example.drivers_app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.drivers_app.MainActivity
 import com.example.taxiapp.IsAccountActivatedRequest
 import com.example.taxiapp.LoginRequest
@@ -32,7 +32,7 @@ class SignInActivity : AppCompatActivity() {
     private var validation: Validation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        ForDebugging().turnOnStrictMode()
+//        ForDebugging().turnOnStrictMode()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
