@@ -1,6 +1,5 @@
 package com.example.taxiapp.ui.main
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -60,13 +59,6 @@ import java.util.logging.Level
 class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         OnCameraIdleListener, OnCameraMoveStartedListener, TaskLoadedCallback {
 
-    /*
-    * Class for return statement
-    * By default status of order is false
-    * And response is null
-    */
-    private class CheckCabRideStatus(var cabRideStatus: Boolean? = false, var checkCabRideResponse: CheckCabRideStatusResponse? = null)
-
     private var isTimerActive: Boolean = false
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
@@ -108,16 +100,27 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             return !mIsGPSEnabled && !mIsNetworkEnabled
         }
 
+    private lateinit var mainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
 //        ForDebugging().turnOnStrictMode() // TODO: test app
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        mainViewModel = MainViewModel()
+        initializeComponents()
+        initializeMap(savedInstanceState)
+        startTimer()
+    }
+
+    private fun initializeComponents() {
         pinImageView = pinImage
         addressTextView = address
 
         sPref = getSharedPreferences("TaxiService", Context.MODE_PRIVATE)
+        mainViewModel.user.id = sPref!!.getInt("customer_id", 0)
+        mainViewModel.user.savedToken = sPref!!.getString("auth_token", "")!!
+        mainViewModel.user.order.id = sPref!!.getInt("orderedCabRideId", -1)
 
         addressSearch = startPlaceSearch as AutocompleteSupportFragment?
 
@@ -125,6 +128,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         wishesDialog = AlertDialog.Builder(this@MainActivity).setView(this.layoutInflater.inflate(R.layout.activity_order_wishes, null)).create()
         ridingEndDialog = AlertDialog.Builder(this@MainActivity).setView(this.layoutInflater.inflate(R.layout.activity_order_info, null)).create()
 
+        addressSearch!!.view!!.onFocusChangeListener = View.OnFocusChangeListener { _, _ ->
+            addressSearch!!.view!!.visibility = View.VISIBLE
+        }
+        addressSearch!!.view!!.alpha = 0F
+
+        orderButton.setOnClickListener {
+            makeOrderOptions()
+        }
+    }
+
+    private fun initializeMap(savedInstanceState: Bundle?) {
         geocoder = Geocoder(this, Locale.getDefault())
 
         // Retrieve location and camera position from saved instance state.
@@ -142,12 +156,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
         mapFragment!!.view!!.alpha = 0.7F
 
-        addressSearch!!.view!!.onFocusChangeListener = View.OnFocusChangeListener { _, _ ->
-            addressSearch!!.view!!.visibility = View.VISIBLE
-        }
-        addressSearch!!.view!!.alpha = 0F
-
-        startTimer()
     }
 
     private fun startTimer() {
@@ -155,16 +163,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             timer = Timer()
             timerTask = object : TimerTask() {
                 override fun run() {
-                    if (sPref!!.getInt("orderedCabRideId", -1) != -1) {
-                        val cabRideStatus = checkCabRideStatus()
-                        if (cabRideStatus.cabRideStatus!!) { // Is order is active
-                            if (cabRideStatus.checkCabRideResponse!!.firstName.isNotEmpty()) { // Has driver accepted an order?
-                                if (cabRideStatus.checkCabRideResponse!!.rideStatus == 2) { // Is order ended?
+                    if (mainViewModel.user.order.id != -1) {
+                        checkCabRideStatus()
+                        if (mainViewModel.user.order.cabRideStatus.value!!) { // Is order is active
+                            if (mainViewModel.user.order.checkCabRideResponse.value!!.firstName.isNotEmpty()) { // Has driver accepted an order?
+                                if (mainViewModel.user.order.checkCabRideResponse.value!!.rideStatus == 2) { // Is order ended?
                                     runOnUiThread { showOrdersEndScreen() }
                                     stopTimer()
                                 } else {
                                     runOnUiThread {
-                                        setLiveCabRideInfo(cabRideStatus.checkCabRideResponse)
+                                        setLiveCabRideInfo(mainViewModel.user.order.checkCabRideResponse.value)
                                         orderButton?.visibility = View.GONE
                                     } // Set riding condition
                                 }
@@ -192,7 +200,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     private fun showOrdersEndScreen() {
         orderButton?.visibility = View.VISIBLE
         orderButton.setOnClickListener {
-            makeOrderOptions(it)
+            makeOrderOptions()
         }
         currentPolyline?.remove()
         ridingEndDialog!!.show()
@@ -203,27 +211,25 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         orderButton!!.text = getString(R.string.make_order)
         orderButton!!.background = ContextCompat.getDrawable(this@MainActivity, R.color.quantum_grey400)
         ridingEndDialog!!.setOnDismissListener {
+            mainViewModel.user.order.id = -1
             sPref!!.edit().putInt("orderedCabRideId", -1).apply()
         }
         ridingEndDialog!!.feedbackButton.setOnClickListener {
-            var ratingScore = ridingEndDialog!!.ratingBar.rating
-            var feedbackText = ridingEndDialog!!.feedbackButton.text
             ridingEndDialog!!.dismiss()
             // TODO: update cab_ride feedback
             //  TODO: update rating of driver
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setLiveCabRideInfo(checkCabRideResponse: CheckCabRideStatusResponse?) {
         findCab()
         progressBar!!.visibility = View.GONE
         addressTextView!!.setText(R.string.driver_is_coming)
-        changeAddress!!.text = checkCabRideResponse!!.brandName + ' ' + checkCabRideResponse.modelName + ", " + checkCabRideResponse.color + ", " + checkCabRideResponse.licensePlate + ", " + checkCabRideResponse.firstName
+        changeAddress!!.text = "${checkCabRideResponse!!.brandName} ${checkCabRideResponse.modelName}, ${checkCabRideResponse.color}, ${checkCabRideResponse.licensePlate}, ${checkCabRideResponse.firstName}"
         // TODO add time and distance to info
     }
 
-    fun makeOrderOptions(view: View) {
+    private fun makeOrderOptions() {
         optionsDialog!!.show()
         optionsDialog!!.addressEdit.setText(addressTextView!!.text)
         optionsDialog?.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -321,7 +327,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             orderButton.setText(R.string.make_order)
             orderButton!!.background = ContextCompat.getDrawable(this@MainActivity, R.color.default_button_material_light)
             orderButton.setOnClickListener {
-                makeOrderOptions(it)
+                makeOrderOptions()
             }
             with(mMap) {
                 this!!.setOnCameraIdleListener(this@MainActivity)
@@ -339,7 +345,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         val managedChannel = ManagedChannelBuilder.forAddress(BuildConfig.ServerAddress, BuildConfig.ServerPort).usePlaintext().build()
         val blockingStub = taxiServiceGrpc.newBlockingStub(managedChannel)
         val cabRide = CabRide.newBuilder()
-                .setCustomerId(sPref!!.getInt("customer_id", 0))
+                .setCustomerId(mainViewModel.user.id)
                 .setStartingPoint(currentMarker!!.position.toString())
                 .setEndingPoint(destinationMarker!!.position.toString())
                 .setPendingOrder(pendingOrder)
@@ -356,11 +362,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                 .setApi(BuildConfig.ApiVersion)
                 .setCabRide(cabRide)
                 .setPrice(tripPriceTextView!!.text.toString().split('.')[0].toInt()) // TODO check price set
-                .setAuthToken(sPref!!.getString("auth_token", ""))
+                .setAuthToken(mainViewModel.user.savedToken)
                 .build()
         val cabRideResponse: CreateCabRideResponse
         try {
             cabRideResponse = blockingStub.withDeadlineAfter(5000, TimeUnit.MILLISECONDS).createCabRide(cabRideRequest) // Запрос на создание
+            mainViewModel.user.order.id = cabRideResponse.cabRideId
             sPref!!.edit().putInt("orderedCabRideId", cabRideResponse.cabRideId).apply() // OrderId saving into SharedPreferences
             managedChannel.shutdown()
             startTimer()
@@ -389,14 +396,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         val blockingStub = taxiServiceGrpc.newBlockingStub(managedChannel)
         val deleteCabRideRequest = DeleteCabRideRequest.newBuilder()
                 .setApi(BuildConfig.ApiVersion)
-                .setCabRideId(sPref!!.getInt("orderedCabRideId", -1))
-                .setCustomerId(sPref!!.getInt("customer_id", -1))
-                .setAuthToken(sPref!!.getString("auth_token", ""))
+                .setCabRideId(mainViewModel.user.order.id)
+                .setCustomerId(mainViewModel.user.id)
+                .setAuthToken(mainViewModel.user.savedToken)
                 .build()
         val deleteCabRideResponse: DeleteCabRideResponse
         try {
             deleteCabRideResponse = blockingStub.withDeadlineAfter(5000, TimeUnit.MILLISECONDS).deleteCabRide(deleteCabRideRequest) // Запрос на создание
             if (deleteCabRideResponse.isSuccessDeleted) {
+                mainViewModel.user.order.id = -1
                 sPref!!.edit().putInt("orderedCabRideId", -1).apply() // OrderId saving into SharedPreferences
                 currentPolyline?.remove() // clear map route
             } else {
@@ -421,21 +429,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         }
     }
 
-    private fun checkCabRideStatus(): CheckCabRideStatus {
+    private fun checkCabRideStatus() {
         // TODO: Validate not null fields
         // Build connection and rpc objects
         val managedChannel = ManagedChannelBuilder.forAddress(BuildConfig.ServerAddress, BuildConfig.ServerPort).usePlaintext().build()
         val blockingStub = taxiServiceGrpc.newBlockingStub(managedChannel)
         val checkCabRideStatusRequest = CheckCabRideStatusRequest.newBuilder()
                 .setApi(BuildConfig.ApiVersion)
-                .setCabRideId(sPref!!.getInt("orderedCabRideId", -1))
-                .setAuthToken(sPref!!.getString("auth_token", ""))
+                .setCabRideId(mainViewModel.user.order.id)
+                .setAuthToken(mainViewModel.user.savedToken)
                 .build()
         val checkCabRideStatusResponse: CheckCabRideStatusResponse
-        return try {
+        try {
             checkCabRideStatusResponse = blockingStub.withDeadlineAfter(5000, TimeUnit.MILLISECONDS).checkCabRideStatus(checkCabRideStatusRequest) // Запрос на создание
             managedChannel.shutdown()
-            CheckCabRideStatus(true, checkCabRideStatusResponse)
+            mainViewModel.user.order.cabRideStatus.postValue(true)
+            mainViewModel.user.order.checkCabRideResponse.postValue(checkCabRideStatusResponse)
         } catch (e: StatusRuntimeException) {
             // Check exceptions
             when {
@@ -445,7 +454,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             }
             logger.log(Level.WARNING, "RPC failed: " + e.status)
             managedChannel.shutdown()
-            CheckCabRideStatus()
+            mainViewModel.user.order.cabRideStatus.postValue(false)
+            mainViewModel.user.order.checkCabRideResponse.postValue(null)
         }
     }
 
@@ -470,7 +480,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                     LatLng(mDefaultLocation.latitude + 0.5, mDefaultLocation.longitude + 1)
             )
         }
-        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG))
+        autocompleteSupportFragment.setPlaceFields(listOf(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG))
         val request = FindAutocompletePredictionsRequest.builder()
                 .setLocationRestriction(bounds)
                 .setCountry("RU")
@@ -549,7 +559,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                 getLocationPermission()
             }
         } catch (e: SecurityException) {
-            Log.e("Exception: %s", e.message)
+            Log.e("Exception: %s", e.message.toString())
         }
 
     }
@@ -582,7 +592,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             }
 
         } catch (e: SecurityException) {
-            Log.e("Exception: %s", e.message)
+            Log.e("Exception: %s", e.message.toString())
         }
 
     }
@@ -617,14 +627,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             mMap!!.addMarker(MarkerOptions().position(mDefaultLocation))
         }
 
-        if (sPref!!.getInt("orderedCabRideId", -1) != -1) {
-            val cabRideStatus = checkCabRideStatus()
-            if (cabRideStatus.cabRideStatus!!) { // Is order is active
-                if (cabRideStatus.checkCabRideResponse!!.firstName.isNotEmpty()) { // Has driver accepted an order?
-                    if (cabRideStatus.checkCabRideResponse!!.rideStatus == 2) { // Is order ended?
+        if (mainViewModel.user.order.id != -1) {
+            checkCabRideStatus()
+            if (mainViewModel.user.order.cabRideStatus.value!!) { // Is order is active
+                if (mainViewModel.user.order.checkCabRideResponse.value!!.firstName.isNotEmpty()) { // Has driver accepted an order?
+                    if (mainViewModel.user.order.checkCabRideResponse.value!!.rideStatus == 2) { // Is order ended?
                         showOrdersEndScreen()
                     } else {
-                        setLiveCabRideInfo(cabRideStatus.checkCabRideResponse) // Set riding condition
+                        setLiveCabRideInfo(mainViewModel.user.order.checkCabRideResponse.value) // Set riding condition
                     }
                 } else {
                     findCab() // Set finding condition
@@ -694,7 +704,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             }
         }
     }
-
 
     companion object {
         // Keys for storing activity state.

@@ -11,6 +11,7 @@ import com.example.taxiapp.R
 import com.example.taxiapp.SignInActivity
 import com.example.taxiapp.ui.main.MainActivity
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity(), SplashNavigator {
@@ -29,7 +30,9 @@ class SplashActivity : AppCompatActivity(), SplashNavigator {
                 Toast.makeText(this@SplashActivity, R.string.error_internet_connection, Toast.LENGTH_LONG).show()
             }
         })
+
         GlobalScope.launch {
+            delay(1000L)
             if (splashViewModel.isTokenValid()) {
                 openMainActivity()
             } else {

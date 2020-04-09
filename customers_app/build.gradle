@@ -26,21 +26,21 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            buildConfigField ("String", "GoogleMapsKey", keystoreProperties.getProperty("GOOGLE_MAPS_API_KEY"))
-            resValue ("string", "google_maps_key", keystoreProperties.getProperty("GOOGLE_MAPS_API_KEY"))
-            buildConfigField ("String", "ApiVersion", keystoreProperties.getProperty("API_VERSION"))
-            buildConfigField ("String", "ServerAddress", keystoreProperties.getProperty("ServerAddress"))
-            buildConfigField ("int", "ServerPort", keystoreProperties.getProperty("ServerPort"))
+            buildConfigField("String", "GoogleMapsKey", keystoreProperties.getProperty("GOOGLE_MAPS_API_KEY"))
+            resValue("string", "google_maps_key", keystoreProperties.getProperty("GOOGLE_MAPS_API_KEY"))
+            buildConfigField("String", "ApiVersion", keystoreProperties.getProperty("API_VERSION"))
+            buildConfigField("String", "ServerAddress", keystoreProperties.getProperty("ServerAddress"))
+            buildConfigField("int", "ServerPort", keystoreProperties.getProperty("ServerPort"))
         }
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField ("String", "GoogleMapsKey", keystoreProperties.getProperty("GOOGLE_MAPS_API_KEY"))
-            resValue ("string", "google_maps_key", keystoreProperties.getProperty("GOOGLE_MAPS_API_KEY"))
-            buildConfigField ("String", "ApiVersion", keystoreProperties.getProperty("API_VERSION"))
-            buildConfigField ("String", "ServerAddress", keystoreProperties.getProperty("ServerAddress"))
-            buildConfigField ("int", "ServerPort", keystoreProperties.getProperty("ServerPort"))
+            buildConfigField("String", "GoogleMapsKey", keystoreProperties.getProperty("GOOGLE_MAPS_API_KEY"))
+            resValue("string", "google_maps_key", keystoreProperties.getProperty("GOOGLE_MAPS_API_KEY"))
+            buildConfigField("String", "ApiVersion", keystoreProperties.getProperty("API_VERSION"))
+            buildConfigField("String", "ServerAddress", keystoreProperties.getProperty("ServerAddress"))
+            buildConfigField("int", "ServerPort", keystoreProperties.getProperty("ServerPort"))
         }
     }
 
