@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name" translatable="false">Taxi App</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="name">Name</string>
+    <string name="email_hint">Fill email to get order receipt and newsletters</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="agree_terms_privacy">By clicking the register button, you agree to our &lt;a href="http://www.google.com">Terms &amp; Conditions&lt;/a>, and &lt;a href="http://www.google.com">Privacy Policy&lt;/a></string>
+    <string name="for_registered_users">I\'m already registered in service.</string>
+    <string name="not_registered">I\'m not registered yet.</string>
+    <string name="address">Address</string>
+    <string name="change_address">Change address</string>
+    <string name="make_order">Make order</string>
+    <string name="destination">Destination</string>
+    <string-array name="pay_type">
+        <item>Cash</item>
+    </string-array>
+    <string name="entrance">Entrance</string>
+    <string name="wishes">Wishes</string>
+    <string name="comment_for_driver">Comment for driver</string>
+    <string name="order_for_another_men">Order for another men</string>
+    <string name="ready">Done</string>
+    <string name="car_delivery">"Car delivery in 10 minutes "</string>
+    <string name="cancel_order">Cancel order</string>
+    <string name="finding_driver">Finding driver…</string>
+    <string name="driver_is_coming">Driver is coming</string>
+    <string name="rate_ride">Rate the trip.</string>
+    <string name="feedback">Feedback</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="phone_number_without_7">Phone number without +7</string>
+    <string name="use_latin_and_next_symbols">Use latin and next symbols: $@!%*#?&amp;</string>
+
+    <string name="warning_address_not_found">Address wasn\'t found</string>
+    <string name="warning_unable_to_locate">Unable to locate a place</string>
+    <string name="warning_weak_password">Weak password</string>
+
+    <string name="error_internet_connection">No internet connection!</string>
+    <string name="error_wrong_data">Wrong login or password</string>
+    <string name="error_invalid_token">Invalid token</string>
+    <string name="error_message_server">Server error</string>
+    <string name="error_invalid_value">Invalid field value</string>
+    <string name="user_is_already_exists">User is already exists</string>
+    <string name="trip_duration">Trip duration</string>
+    <string name="trip_price">Trip price</string>
+    <string name="description_splash">application logo</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="error_unauthorized">Unauthorized</string>
+    <string name="error_unexpected">Unexpected error</string>
+</resources>

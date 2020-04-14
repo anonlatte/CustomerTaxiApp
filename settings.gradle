@@ -1,1 +1,2 @@
-include ':customers_app', ':drivers_app'
+rootProject.name='CustomersApp'
+include ':app'
